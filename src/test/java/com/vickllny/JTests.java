@@ -24,4 +24,40 @@ public class JTests {
         final Object object = requestService.request(snmpv1);
         System.out.print(object);
     }
+
+    @Test
+    public void test2(){
+        final IRequestService requestService = new RequestService();
+        final SNMPV1 snmpv1 = new SNMPV1();
+        snmpv1.setIp("192.168.190.130");
+        snmpv1.setPort(161);
+        snmpv1.setOid(OIDS.SYSTEM_UP_TIME);
+        snmpv1.setReadCommunity("public");
+        final Object object = requestService.request(snmpv1);
+        System.out.print(object);
+    }
+
+    @Test
+    public void test3(){
+        final IRequestService requestService = new RequestService();
+        final SNMPV1 snmpv1 = new SNMPV1();
+        snmpv1.setIp("192.168.190.130");
+        snmpv1.setPort(161);
+        snmpv1.setOid(OIDS.IF_TABLE);
+        snmpv1.setReadCommunity("public");
+        final Object object = requestService.request(snmpv1);
+        System.out.print(object);
+    }
+
+    @Test
+    public void test4(){
+        final IRequestService requestService = new RequestService();
+        final SNMPV1 snmpv1 = new SNMPV1();
+        snmpv1.setIp("192.168.190.130");
+        snmpv1.setPort(161);
+        snmpv1.setOid(OIDS.IF_NUMBER);
+        snmpv1.setReadCommunity("public");
+        final Object object = requestService.request(snmpv1);
+        System.out.print(object);
+    }
 }
