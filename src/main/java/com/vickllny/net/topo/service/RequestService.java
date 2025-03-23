@@ -9,10 +9,7 @@ import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.MPv3;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.*;
-import org.snmp4j.smi.GenericAddress;
-import org.snmp4j.smi.OID;
-import org.snmp4j.smi.OctetString;
-import org.snmp4j.smi.VariableBinding;
+import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 import java.io.IOException;
@@ -53,7 +50,7 @@ public class RequestService implements IRequestService {
 
             // 设置目标
             UserTarget target = new UserTarget();
-            target.setAddress(GenericAddress.parse(snmpv3.getIp()));
+            target.setAddress(GenericAddress.parse("udp:" + snmpv3.getIp() + "/" + snmpv3.getPort()));
             target.setRetries(2);
             target.setTimeout(1500);
             target.setVersion(SnmpConstants.version3);
@@ -96,7 +93,7 @@ public class RequestService implements IRequestService {
 
             // 创建 SNMP 目标
             CommunityTarget target = new CommunityTarget();
-            target.setAddress(GenericAddress.parse(snmpv1.getIp()));
+            target.setAddress(GenericAddress.parse("udp:" + snmpv1.getIp() + "/" + snmpv1.getPort()));
             target.setCommunity(new OctetString(StringUtils.isNotBlank(snmpv1.getWriteCommunity()) ? snmpv1.getWriteCommunity() : snmpv1.getReadCommunity()));
             target.setRetries(2);
             target.setTimeout(1500);
