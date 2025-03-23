@@ -2,7 +2,6 @@ package com.vickllny.net.topo.service;
 
 import com.vickllny.net.topo.protocol.SNMPProtocol;
 import com.vickllny.net.topo.protocol.SNMPV1;
-import com.vickllny.net.topo.protocol.SNMPV2;
 import com.vickllny.net.topo.protocol.SNMPV3;
 import org.apache.commons.lang.StringUtils;
 import org.snmp4j.*;
@@ -23,8 +22,6 @@ public class RequestService implements IRequestService {
     @Override
     public Object request(SNMPProtocol snmp) {
         if(snmp instanceof SNMPV1){
-            return requestV1(snmp);
-        }else if(snmp instanceof SNMPV2){
             return requestV1(snmp);
         }else if(snmp instanceof SNMPV3){
             return requestV3(snmp);
@@ -47,8 +44,8 @@ public class RequestService implements IRequestService {
                     new OctetString(snmpv3.getUsername()),
                     new UsmUser(
                             new OctetString(snmpv3.getUsername()),
-                            AuthMD5.ID, new OctetString(snmpv3.getPassword()),
-                            PrivDES.ID, new OctetString(privPass)
+                            snmpv3.getAuthProtocol().getOid(), new OctetString(snmpv3.getPassword()),
+                            snmpv3.getEncryptionType().getOid(), new OctetString(snmpv3.getPrivacyPassword())
                     )
             );
 

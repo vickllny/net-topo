@@ -4,9 +4,10 @@ public class SNMPV3 extends SNMPProtocol {
 
     protected EncryptionLevel level;
     protected AuthProtocol authProtocol;
-    protected EncryptionType encryptionType;
+    protected PrivacyProtocol privacyProtocol;
     protected String username;
     protected String password;
+    protected String privacyPassword;
 
     public EncryptionLevel getLevel() {
         return level;
@@ -24,12 +25,12 @@ public class SNMPV3 extends SNMPProtocol {
         this.authProtocol = authProtocol;
     }
 
-    public EncryptionType getEncryptionType() {
-        return encryptionType;
+    public PrivacyProtocol getEncryptionType() {
+        return privacyProtocol;
     }
 
-    public void setEncryptionType(EncryptionType encryptionType) {
-        this.encryptionType = encryptionType;
+    public void setEncryptionType(PrivacyProtocol privacyProtocol) {
+        this.privacyProtocol = privacyProtocol;
     }
 
     public String getUsername() {
@@ -46,5 +47,21 @@ public class SNMPV3 extends SNMPProtocol {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public PrivacyProtocol getPrivacyProtocol() {
+        return privacyProtocol;
+    }
+
+    public void setPrivacyProtocol(PrivacyProtocol privacyProtocol) {
+        this.privacyProtocol = privacyProtocol;
+    }
+
+    public String getPrivacyPassword() {
+        return privacyPassword;
+    }
+
+    public void setPrivacyPassword(String privacyPassword) {
+        this.privacyPassword = privacyPassword;
     }
 }
