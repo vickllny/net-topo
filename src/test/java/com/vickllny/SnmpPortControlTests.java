@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class SnmpPortControlTests {
     public static void main(String[] args) {
-        String targetHost = "192.168.10.1"; // 路由器 IP 地址
+//        String targetHost = "192.168.10.1"; // 路由器 IP 地址
+        String targetHost = "192.168.190.130"; // 路由器 IP 地址
         String community = "private"; // SNMP 社区字符串（有权限修改接口状态）
         int snmpPort = 161; // SNMP 端口
         int interfaceIndex = 2; // 接口索引（例如：2）
@@ -33,10 +34,10 @@ public class SnmpPortControlTests {
             target.setTimeout(5000);
 
             // 启用端口
-//            setPortStatus(snmp, target, interfaceIndex, true);
+            setPortStatus(snmp, target, interfaceIndex, true);
 
             // 关闭端口
-             setPortStatus(snmp, target, interfaceIndex, false);
+//             setPortStatus(snmp, target, interfaceIndex, false);
 
             snmp.close();
         } catch (Exception e) {

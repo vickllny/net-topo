@@ -10,7 +10,8 @@ import java.util.*;
 
 public class SnmpGetInterfacesTests {
     public static void main(String[] args) {
-        String targetAddress = "udp:192.168.10.1/161";  // SNMP 设备 IP
+//        String targetAddress = "udp:192.168.10.1/161";  // SNMP 设备 IP
+        String targetAddress = "udp:192.168.190.130/161";  // SNMP 设备 IP
         String community = "public";  // 共同体字符串
 
         // 需要获取的 OID 前缀
