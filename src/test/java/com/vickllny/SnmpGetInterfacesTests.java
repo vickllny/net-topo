@@ -1,8 +1,12 @@
 package com.vickllny;
 
+import com.vickllny.net.topo.constants.OIDS;
+import com.vickllny.net.topo.protocol.SNMPV3;
 import org.snmp4j.*;
 import org.snmp4j.event.ResponseEvent;
+import org.snmp4j.mp.MPv3;
 import org.snmp4j.mp.SnmpConstants;
+import org.snmp4j.security.*;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
@@ -22,6 +26,17 @@ public class SnmpGetInterfacesTests {
         String ifInOctets = "1.3.6.1.2.1.2.2.1.10";  // 接口接收字节数
         String ifOutOctets = "1.3.6.1.2.1.2.2.1.16";  // 接口发送字节数
 
+        final SNMPV3 snmpv3 = new SNMPV3();
+        snmpv3.setIp("192.168.110.130");
+        snmpv3.setPort(161);
+        snmpv3.setOid(OIDS.IF_NUMBER);
+        snmpv3.setUsername("zouq");
+        snmpv3.setLevel(SecurityLevel.authPriv);
+        snmpv3.setAuthProtocol(new AuthMD5());
+        snmpv3.setPrivacyProtocol(new PrivDES());
+        snmpv3.setAuthPassword("qaq123456-");
+        snmpv3.setPrivacyPassword("qaq123456-");
+
         try {
             // 初始化 SNMP
             TransportMapping<UdpAddress> transport = new DefaultUdpTransportMapping();
@@ -29,12 +44,33 @@ public class SnmpGetInterfacesTests {
             transport.listen();
 
             // 创建目标
-            CommunityTarget target = new CommunityTarget();
-            target.setAddress(GenericAddress.parse(targetAddress));
-            target.setCommunity(new OctetString(community));
-            target.setVersion(SnmpConstants.version2c);
-            target.setTimeout(3000);
+//            CommunityTarget target = new CommunityTarget();
+//            target.setAddress(GenericAddress.parse(targetAddress));
+//            target.setCommunity(new OctetString(community));
+//            target.setVersion(SnmpConstants.version2c);
+//            target.setTimeout(3000);
+//            target.setRetries(2);
+
+            USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(MPv3.createLocalEngineID()), 0);
+            SecurityModels.getInstance().addSecurityModel(usm);
+
+            // 添加用户
+            snmp.getUSM().addUser(
+                    new OctetString(snmpv3.getUsername()),
+                    new UsmUser(
+                            new OctetString(snmpv3.getUsername()),
+                            snmpv3.getAuthProtocol().getID(), new OctetString(snmpv3.getAuthPassword()),
+                            snmpv3.getPrivacyProtocol().getID(), new OctetString(snmpv3.getPrivacyPassword())
+                    )
+            );
+
+            UserTarget target = new UserTarget();
+            target.setAddress(GenericAddress.parse("udp:" + snmpv3.getIp() + "/" + snmpv3.getPort()));
             target.setRetries(2);
+            target.setTimeout(1500);
+            target.setVersion(SnmpConstants.version3);
+            target.setSecurityLevel(snmpv3.getLevel().getSnmpValue());
+            target.setSecurityName(new OctetString(snmpv3.getUsername()));
 
             // 获取端口索引（ifIndex）
             List<String> interfaceIndexes = snmpWalk(snmp, target, ifIndexOid);
@@ -69,10 +105,10 @@ public class SnmpGetInterfacesTests {
     /**
      * 执行 SNMP Walk，返回所有匹配的 OID 值
      */
-    private static List<String> snmpWalk(Snmp snmp, CommunityTarget target, String oid) throws Exception {
+    private static List<String> snmpWalk(Snmp snmp, AbstractTarget target, String oid) throws Exception {
         List<String> results = new ArrayList<>();
         OID targetOID = new OID(oid);
-        PDU pdu = new PDU();
+        PDU pdu = target.getVersion() == SnmpConstants.version3 ? new ScopedPDU() : new PDU();
         pdu.setType(PDU.GETNEXT);
         pdu.add(new VariableBinding(targetOID));
 
@@ -91,13 +127,13 @@ public class SnmpGetInterfacesTests {
         return results;
     }
 
-    private static Map<String, String> snmpWalkIp(Snmp snmp, CommunityTarget target) throws Exception {
+    private static Map<String, String> snmpWalkIp(Snmp snmp, AbstractTarget target) throws Exception {
         String ipAdEntAddr = ".1.3.6.1.2.1.4.20.1.1";  // ip
         String ipAdEntIfIndexSuffix = "1.3.6.1.2.1.4.20.1.2";  // ipIndex
         String ipAdEntIfIndex = "." + ipAdEntIfIndexSuffix;  // ipIndex
         OID targetOID = new OID(ipAdEntAddr);
         OID targetOID1 = new OID(ipAdEntIfIndex);
-        PDU pdu = new PDU();
+        PDU pdu = target.getVersion() == SnmpConstants.version3 ? new ScopedPDU() : new PDU();
         pdu.setType(PDU.GETNEXT);
         pdu.add(new VariableBinding(targetOID));
 
@@ -134,10 +170,10 @@ public class SnmpGetInterfacesTests {
     /**
      * 执行 SNMP Walk，返回 Map (索引 -> 值)
      */
-    private static Map<String, String> snmpWalkMap(Snmp snmp, CommunityTarget target, String oid) throws Exception {
+    private static Map<String, String> snmpWalkMap(Snmp snmp, AbstractTarget target, String oid) throws Exception {
         Map<String, String> resultMap = new HashMap<>();
         OID targetOID = new OID(oid);
-        PDU pdu = new PDU();
+        PDU pdu = target.getVersion() == SnmpConstants.version3 ? new ScopedPDU() : new PDU();
         pdu.setType(PDU.GETNEXT);
         pdu.add(new VariableBinding(targetOID));
 

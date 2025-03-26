@@ -41,8 +41,8 @@ public class RequestService implements IRequestService {
                     new OctetString(snmpv3.getUsername()),
                     new UsmUser(
                             new OctetString(snmpv3.getUsername()),
-                            snmpv3.getAuthProtocol().getOid(), new OctetString(snmpv3.getPassword()),
-                            snmpv3.getEncryptionType().getOid(), new OctetString(snmpv3.getPrivacyPassword())
+                            snmpv3.getAuthProtocol().getID(), new OctetString(snmpv3.getAuthPassword()),
+                            snmpv3.getPrivacyProtocol().getID(), new OctetString(snmpv3.getPrivacyPassword())
                     )
             );
 
@@ -54,7 +54,7 @@ public class RequestService implements IRequestService {
             target.setRetries(2);
             target.setTimeout(1500);
             target.setVersion(SnmpConstants.version3);
-            target.setSecurityLevel(SecurityLevel.AUTH_PRIV);
+            target.setSecurityLevel(snmpv3.getLevel().getSnmpValue());
             target.setSecurityName(new OctetString(snmpv3.getUsername()));
 
             // 构造 PDU

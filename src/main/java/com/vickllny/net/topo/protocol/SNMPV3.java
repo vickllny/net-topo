@@ -1,36 +1,32 @@
 package com.vickllny.net.topo.protocol;
 
+import org.snmp4j.security.AuthenticationProtocol;
+import org.snmp4j.security.PrivacyProtocol;
+import org.snmp4j.security.SecurityLevel;
+
 public class SNMPV3 extends SNMPProtocol {
 
-    protected EncryptionLevel level;
-    protected AuthProtocol authProtocol;
+    protected SecurityLevel level;
+    protected AuthenticationProtocol authProtocol;
     protected PrivacyProtocol privacyProtocol;
     protected String username;
-    protected String password;
+    protected String authPassword;
     protected String privacyPassword;
 
-    public EncryptionLevel getLevel() {
+    public SecurityLevel getLevel() {
         return level;
     }
 
-    public void setLevel(EncryptionLevel level) {
+    public void setLevel(SecurityLevel level) {
         this.level = level;
     }
 
-    public AuthProtocol getAuthProtocol() {
+    public AuthenticationProtocol getAuthProtocol() {
         return authProtocol;
     }
 
-    public void setAuthProtocol(AuthProtocol authProtocol) {
+    public void setAuthProtocol(AuthenticationProtocol authProtocol) {
         this.authProtocol = authProtocol;
-    }
-
-    public PrivacyProtocol getEncryptionType() {
-        return privacyProtocol;
-    }
-
-    public void setEncryptionType(PrivacyProtocol privacyProtocol) {
-        this.privacyProtocol = privacyProtocol;
     }
 
     public String getUsername() {
@@ -41,12 +37,12 @@ public class SNMPV3 extends SNMPProtocol {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAuthPassword() {
+        return authPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAuthPassword(String authPassword) {
+        this.authPassword = authPassword;
     }
 
     public PrivacyProtocol getPrivacyProtocol() {
