@@ -84,4 +84,21 @@ public class JTests {
         final Object object = requestService.request(snmpv3);
         System.out.print(object);
     }
+
+    @Test
+    public void test6(){
+        final IRequestService requestService = new RequestService();
+        final SNMPV3 snmpv3 = new SNMPV3();
+        snmpv3.setIp("192.168.110.130");
+        snmpv3.setPort(161);
+        snmpv3.setOid(OIDS.IF_MAC);
+        snmpv3.setUsername("zouq");
+        snmpv3.setLevel(SecurityLevel.authPriv);
+        snmpv3.setAuthProtocol(new AuthMD5());
+        snmpv3.setPrivacyProtocol(new PrivDES());
+        snmpv3.setAuthPassword("qaq123456-");
+        snmpv3.setPrivacyPassword("qaq123456-");
+        final Object object = requestService.request(snmpv3);
+        System.out.print(object);
+    }
 }
