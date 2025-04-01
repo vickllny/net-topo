@@ -25,9 +25,12 @@ public class SnmpGetInterfacesTests {
         String ifOperStatusOid = "1.3.6.1.2.1.2.2.1.8";  // 端口状态
         String ifInOctets = "1.3.6.1.2.1.2.2.1.10";  // 接口接收字节数
         String ifOutOctets = "1.3.6.1.2.1.2.2.1.16";  // 接口发送字节数
+        String lldpMac = "1.0.8802.1.1.2.1.4.1.1.5";  //
+        String lldpPort = "1.0.8802.1.1.2.1.4.1.1.8";  //
+        String lldpSysname = "1.0.8802.1.1.2.1.4.1.1.9";  //
 
         final SNMPV3 snmpv3 = new SNMPV3();
-        snmpv3.setIp("192.168.110.130");
+        snmpv3.setIp("192.168.190.150");
         snmpv3.setPort(161);
         snmpv3.setOid(OIDS.IF_NUMBER);
         snmpv3.setUsername("zouq");
@@ -74,6 +77,9 @@ public class SnmpGetInterfacesTests {
 
             // 获取端口索引（ifIndex）
             List<String> interfaceIndexes = snmpWalk(snmp, target, ifIndexOid);
+            List<String> interfaceIndexes1 = snmpWalk(snmp, target, lldpMac);
+            List<String> interfaceIndexes2 = snmpWalk(snmp, target, lldpPort);
+            List<String> interfaceIndexes3 = snmpWalk(snmp, target, lldpSysname);
 
             // 存储接口信息
             Map<String, String> interfaceNames = snmpWalkMap(snmp, target, ifDescrOid);
@@ -81,6 +87,11 @@ public class SnmpGetInterfacesTests {
             Map<String, String> operStatuses = snmpWalkMap(snmp, target, ifOperStatusOid);
             Map<String, String> receiveBytes = snmpWalkMap(snmp, target, ifInOctets);
             Map<String, String> sendBytes = snmpWalkMap(snmp, target, ifOutOctets);
+            Map<String, String> lldpMacs = snmpWalkMap(snmp, target, lldpMac);
+            Map<String, String> lldpPort1 = snmpWalkMap(snmp, target, lldpPort);
+            Map<String, String> lldpSysname1 = snmpWalkMap(snmp, target, lldpSysname);
+
+
             Map<String, String> ipAddresses = snmpWalkIp(snmp, target);
 
             // 打印接口信息

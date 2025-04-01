@@ -60,7 +60,8 @@ public class RequestService implements IRequestService {
             // 构造 PDU
             ScopedPDU pdu = new ScopedPDU();
             pdu.add(new VariableBinding(new OID(snmpv3.getOid())));
-            pdu.setType(PDU.GET);
+//            pdu.setType(PDU.GET);
+            pdu.setType(PDU.GETNEXT);
 
             // 发送请求
             ResponseEvent response = snmp.send(pdu, target);

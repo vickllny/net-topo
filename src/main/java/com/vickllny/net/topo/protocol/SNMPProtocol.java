@@ -1,5 +1,7 @@
 package com.vickllny.net.topo.protocol;
 
+import org.snmp4j.Target;
+
 public abstract class SNMPProtocol {
 
     protected String ip;
@@ -37,4 +39,6 @@ public abstract class SNMPProtocol {
     public void setOid(String oid) {
         this.oid = oid;
     }
+
+    public abstract Target target();
 }
